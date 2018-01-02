@@ -1,45 +1,61 @@
-<!DOCTYPE HTML>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>All Posts</title>
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
-        <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
-    </head>
-    <body>
-        <center>
-        <div>
-            <h5>Here is collections of posts</h5>
+{% extends "socialnetwork/base.html"%}
+
+{% block title %} All Posts {% endblock %}
+
+{% block heading %} Here is collections of posts {% endblock %}
+
+{% block content %}
+<div class="row">
+    <form class="col s12" method="post" action="{% url 'addpost' %}">
+        <div class="input-field col s12">
+            <input type='text' name='content' id='content'/>
+            <label for='content'>Type new post here...(maximum 160 chars)</label>
+            <button class='btn waves-effect indigo' type='submit'>Add Post<i class="material-icons right">create</i></button>
         </div>
-        <div class="container">
-            <div class="z-depth-1 grey lighten-4 row" style="padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
-                <div class="row">
-                    <form class="col s12" method="post" action="/socialnetwork/add_post">
-                        <div class="input-field col s12">
-                            <input type='text' name='addpost' id='addpost'/>
-                            <label for='addpost'>Type new post here...(maximum 160 chars)</label>
-                            <button class='btn waves-effect indigo' type='submit' name='post'>Add Post<i class="material-icons right">create</i></button>
-                        </div>
-                        {% csrf_token %}
-                    </form>
-                </div>
-                <div class="row" style="text-align: left">
-                    <ul class="collection">
-                        {% for post in posts%}
-                        <li class="collection-item avatar">
-                            <img src="/static/socialnetwork/post.png" alt="" class="circle">
-                            <span class="title">{{post.user}}</span>
-                            <p>{{post.date}}<br/>{{post.content}}</p>
-                            <a href="/socialnetwork/profile/{{post.user}}" class="secondary-content"><i class="material-icons medium">description</i></a>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                <a href="/socialnetwork/logout">Logout</a>
-            </div>
-        </div>
-        </center>
-    </body>
-</html>
+        {% csrf_token %}
+    </form>
+</div>
+<div class="row" style="text-align: left">
+        <ul class="collection with-header">
+            <li class="collection-header"><h5>Follower Stream</h5></li>
+            {% for fpost in fposts%}
+            <li class="collection-item avatar">
+                <img src="{% url 'photo' fpost.user %}" class="circle">
+                <span class="title">{{fpost.user}}</span>
+                <p>{{fpost.date}}<br/>{{fpost.content}}</p><br/>
+                <form method="post" action={% url 'unfollow' fpost.user %}>
+                    <button class='btn grey' type="submit">UnFollow</button>
+                    {% csrf_token %}
+                </form>
+                <a href="{% url 'profile' fpost.user%}" class="secondary-content"><i class="material-icons medium">description</i></a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+<div class="row" style="text-align: left">
+    <ul class="collection">
+        {% for post in posts%}
+        <li class="collection-item avatar">
+            <img src="{% url 'photo' post.user %}" class="circle">
+            <span class="title">{{post.user}}</span>
+            <p>{{post.date}}<br/>{{post.content}}</p><br/>
+            {% if post.user == user %}
+
+            {% elif post.user.username not in profile.follows %}
+            <form method="post" action={% url 'follow' post.user %}>
+                <button class='btn red' type="submit">Follow</button>
+                {% csrf_token %}
+            </form>
+            {% else %}
+            <form method="post" action={% url 'unfollow' post.user %}>
+                <button class='btn grey' type="submit">UnFollow</button>
+                {% csrf_token %}
+            </form>
+            {% endif %}
+            <a href="{% url 'profile' post.user%}" class="secondary-content"><i class="material-icons medium">description</i></a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+<a href="{% url 'logout' %}">Logout</a>
+{% endblock %}

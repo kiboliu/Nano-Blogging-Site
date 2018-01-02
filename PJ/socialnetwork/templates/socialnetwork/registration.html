@@ -1,68 +1,62 @@
-<!DOCTYPE HTML>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Register</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
-        <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
-    </head>
-    <body>
-        <center>
-        <div>
-            <h5>Please Create a New Account.</h5>
+{% extends "socialnetwork/base.html"%}
+
+{% block title %} Register {% endblock %}
+
+{% block heading %} Please Create a New Account. {% endblock %}
+
+{% block content %}
+<form class="col s12" method="post" action="{% url 'register' %}">
+    <div class='row'>
+        <div class='col s12'>
         </div>
-        <div class="container">
-            <div class="z-depth-1 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
-                <form class="col s12" method="post" action="/socialnetwork/register">
-                    <div class='row'>
-                        <div class='col s12'>
-                        </div>
-                    </div>
-
-                    <div class='row'>
-                        <div class='input-field col s6'>
-                            <input class='validate' type='text' name='firstname' id='firstname' value="{{firstname}}"/>
-                            <label for='firstname'>First Name</label>
-                        </div>
-                        <div class='input-field col s6'>
-                                <input class='validate' type='text' name='lastname' id='lastname' value="{{lastname}}"/>
-                                <label for='lastname'>Last Name</label>
-                            </div>
-                    </div>
-
-                    <div class='row'>
-                        <div class='input-field col s12'>
-                            <input class='validate' type='text' name='username' id='username' value="{{username}}"/>
-                            <label for='username'>Username</label>
-                        </div>
-                    </div>
-        
-                    <div class='row'>
-                        <div class='input-field col s12'>
-                            <input class='validate' type='password' name='password' id='password' />
-                            <label for='password'>Password</label>
-                        </div>
-                    </div>
-
-                    <div class='row'>
-                        <div class='input-field col s12'>
-                            <input class='validate' type='password' name='password-confirm' id='password-confirm' />
-                            <label for='password-confirm'>Password Confirmation</label>
-                        </div>
-                    </div>
-        
-                    <br/>
-                    <center>
-                        <div class='row'>
-                            <button type='submit' name='login' class='col s12 btn btn-middle waves-effect indigo'>Register</button>
-                        </div>
-                        <br/>
-                    </center>
-                    {% csrf_token %}
-                </form>
-            </div>
+    </div>
+    {% if form.errors %}
+        <p style="color:red">
+            {{form.errors}}
+        </p>
+    {% endif %}
+    <div class='row'>
+        <div class='input-field col s6'>
+            {{form.first_name}}
+            <!-- <input class='validate' type='text' name='first_name' id='first_name' value="{{form.first_name.value}}"/> -->
+            <label for='firstname'>First Name</label>
         </div>
-        </center>
-    </body>
-</html>
+        <div class='input-field col s6'>
+            {{form.last_name}}
+            <!-- <input class='validate' type='text' name='last_name' id='last_name' value="{{form.last_name.value}}"/> -->
+            <label for='lastname'>Last Name</label>
+        </div>
+    </div>
+
+    <div class='row'>
+        <div class='input-field col s12'>
+            {{form.username}}
+            <!-- <input class='validate' type='text' name='username' id='username' value="{{form.username.value}}"/> -->
+            <label for='username'>Username</label>
+        </div>
+    </div>
+
+    <div class='row'>
+        <div class='input-field col s12'>
+            <input class='validate' type='password' name='password1' id='password1' />
+            <label for='password'>Password</label>
+        </div>
+    </div>
+
+    <div class='row'>
+        <div class='input-field col s12'>
+            <input class='validate' type='password' name='password2' id='password2' />
+            <label for='password-confirm'>Password Confirmation</label>
+        </div>
+    </div>
+
+    <br/>
+    <center>
+        <div class='row'>
+            <button type='submit' name='login' class='col s12 btn btn-middle waves-effect indigo'>Register</button>
+        </div>
+        <br/>
+    </center>
+    {% csrf_token %}
+</form>
+{% endblock %}
