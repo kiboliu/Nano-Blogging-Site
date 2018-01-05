@@ -6,35 +6,43 @@
 
 {% block content %}
 <div class="row">
-    <form class="col s12" method="post" action="{% url 'addpost' %}">
+    <!-- <form class="col s12" method="post" action="{% url 'addpost' %}"> -->
         <div class="input-field col s12">
+            <span id="error"></span>
             <input type='text' name='content' id='content'/>
             <label for='content'>Type new post here...(maximum 160 chars)</label>
-            <button class='btn waves-effect indigo' type='submit'>Add Post<i class="material-icons right">create</i></button>
+            <button class='btn waves-effect indigo' onclick="addPost()">Add Post<i class="material-icons right">create</i></button>
         </div>
         {% csrf_token %}
-    </form>
+    <!-- </form> -->
 </div>
 <div class="row" style="text-align: left">
-        <ul class="collection with-header">
-            <li class="collection-header"><h5>Follower Stream</h5></li>
-            {% for fpost in fposts%}
-            <li class="collection-item avatar">
-                <img src="{% url 'photo' fpost.user %}" class="circle">
-                <span class="title">{{fpost.user}}</span>
-                <p>{{fpost.date}}<br/>{{fpost.content}}</p><br/>
-                <form method="post" action={% url 'unfollow' fpost.user %}>
-                    <button class='btn grey' type="submit">UnFollow</button>
-                    {% csrf_token %}
-                </form>
-                <a href="{% url 'profile' fpost.user%}" class="secondary-content"><i class="material-icons medium">description</i></a>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
-<div class="row" style="text-align: left">
-    <ul class="collection">
-        {% for post in posts%}
+    <ul id="followstream" class="collection with-header">
+        <li class="collection-header"><h5>Follower Stream</h5></li>
+        {% for fpost in fposts%}
+        <li class="collection-item avatar">
+            <img src="{% url 'photo' fpost.user %}" class="circle">
+            <span class="title">{{fpost.user}}</span>
+            <p>{{fpost.date}}<br/>{{fpost.content}}</p><br/>
+            <form method="post" action={% url 'unfollow' fpost.user %}>
+                <button class='btn grey' type="submit">UnFollow</button>
+                {% csrf_token %}
+            </form>
+            <a href="{% url 'profile' fpost.user%}" class="secondary-content"><i class="material-icons medium">description</i></a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+<div class="row" style="text-align: left" onload="getList()">
+    <input type="hidden" id="loginusername" value="{{user.username}}"/>
+    <input type="hidden" id="profilefollows" value="{{profile.follows}}"/>
+    <ul class="collection with-header">
+        <li class="collection-header">
+            <h5>All Posts Here</h5>
+        </li>
+        <br/>
+        <div id="postlist">
+        <!-- {% for post in posts%}
         <li class="collection-item avatar">
             <img src="{% url 'photo' post.user %}" class="circle">
             <span class="title">{{post.user}}</span>
@@ -53,9 +61,11 @@
             </form>
             {% endif %}
             <a href="{% url 'profile' post.user%}" class="secondary-content"><i class="material-icons medium">description</i></a>
-        </li>
-        {% endfor %}
+        </li>                     
+        {% endfor %} -->
+        </div>
     </ul>
 </div>
+
 <a href="{% url 'logout' %}">Logout</a>
 {% endblock %}
