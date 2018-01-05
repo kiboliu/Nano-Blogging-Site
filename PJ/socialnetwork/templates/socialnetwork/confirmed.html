@@ -1,0 +1,12 @@
+{% extends "socialnetwork/base.html"%}
+
+{% block title %} Registration Confirmation {% endblock %}
+
+{% block heading %} Please Confirm Your Email. {% endblock %}
+
+{% block content %} 
+    <p>
+        Thank you for confirming your email address.
+        Please <a href="{% url 'login' %}">login</a> to access your home page.
+    </p>
+{% endblock %}

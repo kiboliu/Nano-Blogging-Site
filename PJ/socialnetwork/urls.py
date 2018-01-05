@@ -15,4 +15,6 @@ urlpatterns = [
     url(r'^photo/(?P<user>\w+)$', views.get_photo, name="photo"),
     url(r'^follow/(?P<user>\w+)$', views.follow, name='follow'),
     url(r'^unfollow/(?P<user>\w+)$', views.unfollow, name='unfollow'),
+    url(r'^confirm-registration/(?P<username>[a-zA-Z0-9_@\+\-]+)/(?P<token>[a-z0-9\-]+)$',
+        views.confirm_registration, name='confirm'),
 ]
